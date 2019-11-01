@@ -1,9 +1,27 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
+  private readonly API_URL = 'http://jsonplaceholder.typicode.com/todos';
 
-  constructor() { }
+  constructor(private http: HttpClient) {
+  }
+
+  getTodos(count = 10): Observable<ITodo[]> {
+    return this.http.get<ITodo[]>(this.API_URL).pipe(
+      map(data => data.filter((todo, i) => i < count))
+    );
+
+  }
+}
+
+export interface ITodo {
+  id: number;
+  title: string;
+  completed: boolean;
 }
