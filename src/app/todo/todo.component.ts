@@ -28,9 +28,37 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  toggleTodo(i) {}
-  addTodo() {}
-  deleteTodo(i) {}
+  toggleTodo(i) {
+    const todo = this.todoList[i];
+    const todoData = {
+      ...todo,
+      completed: !todo.completed
+    };
+    this.todoService.updateTodo(todoData).subscribe(next => {
+      this.todoList[i].completed = next.completed;
+    });
+  }
+
+  addTodo() {
+    const todo: Partial<ITodo> = {
+      title: this.inputControl.value,
+      completed: false
+    };
+    this.todoService.createTodo(todo).subscribe(next => {
+      this.todoList.unshift(next);
+      this.inputControl.setValue('');
+    });
+  }
+
+  deleteTodo(i) {
+    const todo = this.todoList[i];
+    this.todoService.deleteTodo(todo.id).subscribe(
+      () => {
+        this.todoList = this.todoList.filter(
+          t => t.id !== todo.id
+        );
+      });
+  }
 
 }
 

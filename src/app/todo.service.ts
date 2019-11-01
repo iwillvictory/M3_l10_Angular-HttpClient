@@ -18,6 +18,23 @@ export class TodoService {
     );
 
   }
+
+  updateTodo(todo: ITodo): Observable<ITodo> {
+    return this.http.patch<ITodo>(
+      `${this.API_URL}/${todo.id}`, todo);
+  }
+
+  deleteTodo(id: number): Observable<any> {
+    return this.http.delete(
+      `${this.API_URL}/${id}`
+    );
+  }
+
+  createTodo(todo: Partial<ITodo>): Observable<ITodo> {
+    return this.http.post<ITodo>(this.API_URL, todo);
+  }
+
+
 }
 
 export interface ITodo {
